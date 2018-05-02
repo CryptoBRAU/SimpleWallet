@@ -1,0 +1,8 @@
+{
+  "name": "SimpleWallet",
+  "app_id": "2c08811b",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
