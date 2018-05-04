@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Buy & Sell</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <form [formGroup]="buyAndSell" (ngSubmit)="execute()">
+    <ion-item>
+      <ion-label floating>Coin name</ion-label>
+      <ion-input type="text" formControlName="coinName"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>BTC amount</ion-label>
+      <ion-input type="number" formControlName="btcAmount"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>% to Sell</ion-label>
+      <ion-input type="number" formControlName="percentToSell"></ion-input>
+    </ion-item>
+    <button ion-button block type="submit" [disabled]="!buyAndSell.valid">Execute</button>
+  </form>
+</ion-content>
