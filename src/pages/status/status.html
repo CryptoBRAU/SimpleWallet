@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Status</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="refresh()">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list no-border>
+    <ion-list-header>
+      Binance Balances
+    </ion-list-header>
+    <ion-item>
+      <ion-icon name='logo-bitcoin' item-start></ion-icon>
+      <span class="align-right">{{binanceBtcBalance | number : '1.2-8'}}</span>
+    </ion-item>
+    <ion-item>
+      <ion-icon name='logo-usd' item-start></ion-icon>
+      <span class="align-right">{{binanceUsdBalance | currency}}</span>
+    </ion-item>
+  </ion-list>
+  <!-- <ion-list no-border> TODO Check which type of info we have from the server
+    <ion-list-header>
+      Binance Orders
+    </ion-list-header>
+    <ion-item>
+      <p>
+        Pair
+        <span class="align-right">ADA/BTC</span>
+      </p>
+      <p>
+        Avg./Price
+        <span class="align-right">{{binanceBtcBalance | number : '1.2-8'}}</span>
+      </p>
+      <p>
+        Amount
+        <span class="align-right">{{binanceUsdBalance | currency}}</span>
+      </p>
+    </ion-item>
+  </ion-list> -->
+</ion-content>

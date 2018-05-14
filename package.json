@@ -26,6 +26,9 @@
     "@ionic-native/status-bar": "4.7.0",
     "@ionic/pro": "1.0.20",
     "@ionic/storage": "2.1.3",
+    "@types/crypto-js": "^3.1.39",
+    "cordova-sqlite-storage": "^2.3.1",
+    "crypto-js": "^3.1.9-1",
     "ionic-angular": "3.9.2",
     "ionic2-super-tabs": "^4.2.2",
     "ionicons": "3.0.0",
@@ -37,5 +40,10 @@
     "@ionic/app-scripts": "3.1.9",
     "typescript": "~2.6.2"
   },
-  "description": "An Ionic project"
+  "description": "An Ionic project",
+  "cordova": {
+    "plugins": {
+      "cordova-sqlite-storage": {}
+    }
+  }
 }

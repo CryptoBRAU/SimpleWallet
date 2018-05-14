@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 
 @IonicPage()
 @Component({
@@ -9,22 +10,43 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class SettingsPage {
 
-  private settings : FormGroup;
+  private settingsForm : FormGroup;
+  private settings : any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder) {
-    this.settings = this.formBuilder.group({
-      key: ['', Validators.required],
-      secret: ['', Validators.required],
-      defaultBtcAmount: [''],
-      defaultPercentToSell: ['']
+  constructor(public navCtrl: NavController, public navParams: NavParams, private formBuilder: FormBuilder, private storage: Storage, private toast: ToastController) {
+    this.settings = {
+      username: '',
+      key: '',
+      secret: '',
+      defaultBtcAmount: 0,
+      defaultPercentToSell: 3,
+      defaultPercentToStopLoss: 2
+    };
+    this.buildForm();
+    this.storage.get('settings').then((val) => {
+      if (val) {
+        this.settings = val;
+        this.buildForm();
+      }
     });
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SettingsPage');
+  buildForm() {
+    this.settingsForm = this.formBuilder.group({
+      username: [this.settings.username, Validators.required],
+      key: [this.settings.key, Validators.required],
+      secret: [this.settings.secret, Validators.required],
+      defaultBtcAmount: [this.settings.defaultBtcAmount],
+      defaultPercentToSell: [this.settings.defaultPercentToSell],
+      defaultPercentToStopLoss: [this.settings.defaultPercentToStopLoss]
+    });
   }
 
   save() {
-    console.log(this.settings.value)
+    this.storage.set('settings', this.settingsForm.value);
+    this.toast.create({
+      message: 'Setiings successfully saved',
+      duration: 2000
+    }).present();
   }
 }

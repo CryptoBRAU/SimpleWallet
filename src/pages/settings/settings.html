@@ -5,23 +5,31 @@
 </ion-header>
 
 <ion-content padding>
-    <form [formGroup]="settings" (ngSubmit)="save()">
-        <ion-item>
-            <ion-label floating>Key</ion-label>
-            <ion-input type="text" formControlName="key"></ion-input>
-          </ion-item>
+    <form [formGroup]="settingsForm" (ngSubmit)="save()">
+      <ion-item>
+        <ion-label floating>Username</ion-label>
+        <ion-input type="text" formControlName="username"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Key</ion-label>
+        <ion-input type="text" formControlName="key"></ion-input>
+      </ion-item>
       <ion-item>
         <ion-label floating>Secret</ion-label>
-        <ion-input type="text" formControlName="secret"></ion-input>
+        <ion-input type="password" formControlName="secret"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label floating>Default BTC amount</ion-label>
-        <ion-input type="number" formControlName="defaultBtcAmount"></ion-input>
+        <ion-input type="number" step="0.01" formControlName="defaultBtcAmount"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label floating>Default % to Sell</ion-label>
         <ion-input type="number" formControlName="defaultPercentToSell"></ion-input>
       </ion-item>
-      <button ion-button block type="submit" [disabled]="!settings.valid">Save</button>
+      <ion-item>
+        <ion-label floating>Default % to Stop Loss</ion-label>
+        <ion-input type="number" formControlName="defaultPercentToStopLoss"></ion-input>
+      </ion-item>
+      <button ion-button block type="submit" [disabled]="!settingsForm.valid">Save</button>
     </form>
 </ion-content>
