@@ -14,10 +14,7 @@ export class OrderServerProvider {
   }
 
   // TODO set to a provider
-  async getSettings(force?: Boolean) {
-    if(this.settings && !force) {
-      return this.settings;
-    }
+  async getSettings() {
     this.settings = await this.storage.get('settings');
     if(!this.settings || !this.settings.username) {
       this.toast.create({

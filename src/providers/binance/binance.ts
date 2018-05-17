@@ -50,10 +50,8 @@ export class BinanceProvider {
     }
     let accountInfoUrl = this.binanceUrl + '/api/v3/account';
 
-    return new Promise(resolve => {
-      this.http.get(accountInfoUrl, options).subscribe(data => {
-        resolve(data);
-      });
+    return new Promise((resolve, reject) => {
+      this.http.get(accountInfoUrl, options).subscribe(data => { resolve(data); }, err => { reject(this.getErrorMessage(err)); });
     });
   }
 
@@ -62,10 +60,18 @@ export class BinanceProvider {
     if (symbol) {
       priceUrl += '?symbol=' + symbol;
     }
-    return new Promise(resolve => {
-      this.http.get(priceUrl).subscribe(data => {
-        resolve(data);
-      });
+    return new Promise((resolve, reject) => {
+      this.http.get(priceUrl).subscribe(data => { resolve(data); }, err => { reject(this.getErrorMessage(err)); });
     });
+  }
+
+  getErrorMessage(error) {
+    if (error.error) {
+      switch (error.error.code) {
+        case -2015:
+          return 'Invalid API-key/Secret.';
+      }
+    }
+    return 'Binance server is not responding, please try later.';
   }
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import { BinanceProvider } from '../../providers/binance/binance';
 
 @IonicPage()
@@ -14,15 +14,19 @@ export class StatusPage {
   public binanceBtcBalance: number;
   public binanceUsdBalance: number;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, private binance: BinanceProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public loading: LoadingController, private toast: ToastController, private binance: BinanceProvider) {
     this.binanceBtcBalance = 0;
     this.binanceUsdBalance = 0;
+  }
+
+  ionViewDidEnter() {
     this.refresh();
   }
 
   async refresh() {
     let loader = this.loading.create({
-      content: "Loading balances"
+      content: "Loading balances",
+      showBackdrop: false
     });
     loader.present();
     await this.loadBinanceBalance();
@@ -30,19 +34,26 @@ export class StatusPage {
   }
 
   async loadBinanceBalance() {
-    this.coinsPrice = await this.binance.getPrice();
-    this.accountInfo = await this.binance.accountInfo();
-    if (this.accountInfo) {
-      let balances = this.getBalances(this.accountInfo.balances);
-      let binanceBtcBalance = 0;
-      let binanceUsdBalance = 0;
-      balances.forEach(coin => {
-        let btcUsdValue = this.getBtcAndUsdValue(coin);
-        binanceBtcBalance += btcUsdValue.btcAmount;
-        binanceUsdBalance += btcUsdValue.usdAmount;
-      });
-      this.binanceBtcBalance = binanceBtcBalance;
-      this.binanceUsdBalance = binanceUsdBalance;
+    try {
+      this.coinsPrice = await this.binance.getPrice();
+      this.accountInfo = await this.binance.accountInfo();
+      if (this.accountInfo) {
+        let balances = this.getBalances(this.accountInfo.balances);
+        let binanceBtcBalance = 0;
+        let binanceUsdBalance = 0;
+        balances.forEach(coin => {
+          let btcUsdValue = this.getBtcAndUsdValue(coin);
+          binanceBtcBalance += btcUsdValue.btcAmount;
+          binanceUsdBalance += btcUsdValue.usdAmount;
+        });
+        this.binanceBtcBalance = binanceBtcBalance;
+        this.binanceUsdBalance = binanceUsdBalance;
+      }
+    } catch (error){
+      this.toast.create({
+        message: error,
+        duration: 2000
+      }).present();
     }
   }
 
