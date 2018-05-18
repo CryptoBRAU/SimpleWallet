@@ -1,41 +1,25 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ToastController } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
+import { SettingsProvider } from '../settings/settings';
 
 @Injectable()
 export class OrderServerProvider {
 
-  private settings : any;
   private serverUrl : string;
 
-  constructor(public http: HttpClient, private storage: Storage, private toast: ToastController) {
+  constructor(public http: HttpClient, private settings: SettingsProvider) {
     this.serverUrl = "http://13.57.204.17:3000";
-  }
-
-  // TODO set to a provider
-  async getSettings() {
-    this.settings = await this.storage.get('settings');
-    if(!this.settings || !this.settings.username) {
-      this.toast.create({
-        message: "Username not setted.",
-        duration: 2000
-      }).present();
-      return null;
-    }
-    if(!this.settings || !this.settings.key || !this.settings.secret) {
-      this.toast.create({
-        message: "Binance key/secret wasn't setted.",
-        duration: 2000
-      }).present();
-      return null;
-    }
-    return this.settings;
   }
 
   async executeBtcOrder(order: any) {
     let orderUrl = this.serverUrl + '/order';
-    let settings = await this.getSettings();
+    let settings = await this.settings.getSettings();
+    if(!settings.username) {
+      return Promise.resolve({
+        code: 1,
+        msg: 'Invalid username or not setted.'
+      });
+    }
     let orderData = {
       coin: order.coinName,
       btcAmount: order.btcAmount,
