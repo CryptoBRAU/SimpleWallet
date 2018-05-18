@@ -50,8 +50,13 @@ export class StatusPage {
         this.binanceUsdBalance = binanceUsdBalance;
       }
     } catch (error){
+      let errorMessage = error;
+      //TODO To create an ErrorHandling Provider
+      if (errorMessage instanceof Error) {
+        errorMessage = errorMessage.message;
+      }
       this.toast.create({
-        message: error,
+        message: errorMessage,
         duration: 2000
       }).present();
     }

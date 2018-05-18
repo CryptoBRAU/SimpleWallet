@@ -15,6 +15,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { TabsPage } from '../pages/tabs/tabs';
 import { BinanceProvider } from '../providers/binance/binance';
 import { OrderServerProvider } from '../providers/order-server/order-server';
+import { SettingsProvider } from '../providers/settings/settings';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { OrderServerProvider } from '../providers/order-server/order-server';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     BinanceProvider,
-    OrderServerProvider
+    OrderServerProvider,
+    SettingsProvider
   ]
 })
 export class AppModule {}

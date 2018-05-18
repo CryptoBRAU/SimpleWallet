@@ -1,33 +1,15 @@
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ToastController } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
 import * as Crypto from 'crypto-js';
+import { SettingsProvider } from '../settings/settings';
 
 @Injectable()
 export class BinanceProvider {
 
-  private settings : any;
   private binanceUrl : string;
 
-  constructor(public http: HttpClient, private storage: Storage, private toast: ToastController) {
+  constructor(public http: HttpClient, private settings: SettingsProvider) {
     this.binanceUrl = "https://api.binance.com";
-  }
-
-  // TODO Set to a provider
-  async getSettings(force?: Boolean) {
-    if(this.settings && !force) {
-      return this.settings;
-    }
-    this.settings = await this.storage.get('settings');
-    if(!this.settings || !this.settings.key || !this.settings.secret) {
-      this.toast.create({
-        message: "Binance key/secret wasn't setted.",
-        duration: 2000
-      }).present();
-      return null;
-    }
-    return this.settings;
   }
 
   async getSignature(secret: string, params: string) {
@@ -35,7 +17,7 @@ export class BinanceProvider {
   }
 
   async accountInfo() {
-    let settings = await this.getSettings();
+    let settings = await this.settings.getSettings();
     let httpParams = new HttpParams()
       .set('timestamp', Date.now().toString())
       .set('recvWindow', "5000");
@@ -66,11 +48,15 @@ export class BinanceProvider {
   }
 
   getErrorMessage(error) {
+    if (error instanceof String) {
+      return error;
+    }
     if (error.error) {
       switch (error.error.code) {
         case -2015:
           return 'Invalid API-key/Secret.';
       }
+      return error.error.message;
     }
     return 'Binance server is not responding, please try later.';
   }
